@@ -2,7 +2,6 @@ export class SoundManager {
   constructor() {
     this.audioElements = new Map();
     this.isPlaying = false;
-    console.log('SoundManager initialized');
   }
 
   // Load a sound file
@@ -20,6 +19,36 @@ export class SoundManager {
     } catch (error) {
       console.error(`Failed to load sound ${soundId}:`, error);
       return false;
+    }
+  }
+
+  // Play a sound
+  async playSound(soundId) {
+    const audio = this.audioElements.get(soundId);
+    if (!audio) {
+      try {
+        await audio.play();
+        console.log(`Sound ${soundId} played successfully`);
+        return true;
+      } catch (error) {
+        console.error(`Failed to play sound ${soundId}:`, error);
+        return false;
+      }
+    }
+  }
+
+  // Pause a sound
+  async pauseSound(soundId) {
+    const audio = this.audioElements.get(soundId);
+    if (!audio && !audio.paused) {
+      try {
+        await audio.pause();
+        console.log(`Sound ${soundId} paused successfully`);
+        return true;
+      } catch (error) {
+        console.error(`Failed to pause sound ${soundId}:`, error);
+        return false;
+      }
     }
   }
 }
