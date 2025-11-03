@@ -51,4 +51,19 @@ export class SoundManager {
       }
     }
   }
+
+  // Set volume for a sound (0-100)
+  setVolume(soundId, volume) {
+    const audio = this.audioElements.get(soundId);
+    if (!audio) {
+      console.error(`Sound ${soundId} not found`);
+      return false;
+    }
+
+    // Convert volume to decimal (0-1)
+    const volumeDecimal = volume / 100;
+    audio.volume = volumeDecimal;
+    console.log(`Sound ${soundId} volume set to ${volume}%`);
+    return true;
+  }
 }
