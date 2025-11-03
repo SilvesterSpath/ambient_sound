@@ -25,7 +25,8 @@ export class SoundManager {
   // Play a sound
   async playSound(soundId) {
     const audio = this.audioElements.get(soundId);
-    if (!audio) {
+
+    if (audio) {
       try {
         await audio.play();
         console.log(`Sound ${soundId} played successfully`);
@@ -40,7 +41,7 @@ export class SoundManager {
   // Pause a sound
   async pauseSound(soundId) {
     const audio = this.audioElements.get(soundId);
-    if (!audio && !audio.paused) {
+    if (audio && !audio.paused) {
       try {
         await audio.pause();
         console.log(`Sound ${soundId} paused successfully`);

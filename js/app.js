@@ -15,6 +15,7 @@ class AmbientMixer {
   init() {
     try {
       this.loadAllSounds();
+
       this.isInitialized = true;
     } catch (error) {
       console.error('Failed to initialize app:', error);
@@ -42,4 +43,15 @@ class AmbientMixer {
 document.addEventListener('DOMContentLoaded', () => {
   const app = new AmbientMixer();
   app.init();
+
+  const playPauseBtn = document.getElementById('playPauseAll');
+
+  playPauseBtn.addEventListener('click', async () => {
+    // Example: play one sound to “unlock” audio via a real user gesture
+    await app.soundManager.playSound('rain');
+    // Later: start/stop multiple sounds as needed
+  });
+
+  // make app available for testing in browser
+  window.app = app;
 });
