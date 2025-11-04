@@ -62,6 +62,17 @@ export class UI {
         </div>
       </div>
     </div>`;
-    this.soundCardsContainer.appendChild(soundCard);
+
+    return soundCard;
+  }
+
+  // render all sound cards
+  renderSoundCards(sounds) {
+    this.soundCardsContainer.innerHTML = '';
+
+    sounds.forEach((item) => {
+      const soundCard = this.createSoundCards(item);
+      this.soundCardsContainer.appendChild(soundCard);
+    });
   }
 }
