@@ -21,6 +21,9 @@ class AmbientMixer {
       // render all sound cards
       this.ui.renderSoundCards(sounds);
 
+      // setup all event listeners
+      this.setupEventListeners();
+
       // load all sound files
       this.loadAllSounds();
 
@@ -28,6 +31,19 @@ class AmbientMixer {
     } catch (error) {
       console.error('Failed to initialize app:', error);
     }
+  }
+
+  // Setup all event listeners
+  setupEventListeners() {
+    // Handle all clicks with event delegation
+    document.addEventListener('click', (event) => {
+      // Check if play button was clicked
+      if (event.target.closest('.play-btn')) {
+        const soundId = event.target.closest('.play-btn').dataset.sound;
+        console.log('Playing sound:', soundId);
+        this.soundManager.playSound(soundId);
+      }
+    });
   }
 
   // Load all sound files
