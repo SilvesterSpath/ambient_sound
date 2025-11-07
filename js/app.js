@@ -36,12 +36,12 @@ class AmbientMixer {
   // Setup all event listeners
   setupEventListeners() {
     // Handle all clicks with event delegation
-    document.addEventListener('click', (event) => {
+    document.addEventListener('click', async (event) => {
       // Check if play button was clicked
       if (event.target.closest('.play-btn')) {
         const soundId = event.target.closest('.play-btn').dataset.sound;
         console.log('Playing sound:', soundId);
-        this.soundManager.playSound(soundId);
+        await this.toggleSound(soundId);
       }
     });
   }
@@ -60,6 +60,21 @@ class AmbientMixer {
         console.log(`Sound ${item.name} loaded successfully`);
       }
     });
+  }
+
+  // Toggle a sound
+  async toggleSound(soundId) {
+    const audio = this.soundManager.audioElements.get(soundId);
+    if (!audio) {
+      console.warn(`Sound ${soundId} not found`);
+      return;
+    }
+
+    if (audio.paused) {
+      await this.soundManager.playSound(soundId);
+    } else {
+      await this.soundManager.pauseSound(soundId);
+    }
   }
 }
 
