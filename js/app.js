@@ -73,9 +73,11 @@ class AmbientMixer {
       this.soundManager.setVolume(soundId, 50);
       await this.soundManager.playSound(soundId);
       // @todo - update play button to show pause icon
+      this.ui.updateSoundPlayButton(soundId, true);
     } else {
       await this.soundManager.pauseSound(soundId);
       // @todo - update play button to show play icon
+      this.ui.updateSoundPlayButton(soundId, false);
     }
   }
 }
