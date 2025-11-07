@@ -29,7 +29,6 @@ export class SoundManager {
     if (audio) {
       try {
         await audio.play();
-        console.log(`Sound ${soundId} played successfully`);
         return true;
       } catch (error) {
         console.error(`Failed to play sound ${soundId}:`, error);
@@ -44,7 +43,6 @@ export class SoundManager {
     if (audio && !audio.paused) {
       try {
         await audio.pause();
-        console.log(`Sound ${soundId} paused successfully`);
         return true;
       } catch (error) {
         console.error(`Failed to pause sound ${soundId}:`, error);

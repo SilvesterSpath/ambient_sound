@@ -40,7 +40,6 @@ class AmbientMixer {
       // Check if play button was clicked
       if (event.target.closest('.play-btn')) {
         const soundId = event.target.closest('.play-btn').dataset.sound;
-        console.log('Playing sound:', soundId);
         await this.toggleSound(soundId);
       }
     });
@@ -71,9 +70,12 @@ class AmbientMixer {
     }
 
     if (audio.paused) {
+      this.soundManager.setVolume(soundId, 50);
       await this.soundManager.playSound(soundId);
+      // @todo - update play button to show pause icon
     } else {
       await this.soundManager.pauseSound(soundId);
+      // @todo - update play button to show play icon
     }
   }
 }
