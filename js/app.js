@@ -43,6 +43,15 @@ class AmbientMixer {
         await this.toggleSound(soundId);
       }
     });
+
+    // Handle all volume changes with event delegation
+    document.addEventListener('input', async (event) => {
+      if (event.target.closest('.volume-slider')) {
+        const soundId = event.target.closest('.volume-slider').dataset.sound;
+        const volume = parseInt(event.target.value);
+        this.setSoundVolume(soundId, volume);
+      }
+    });
   }
 
   // Load all sound files
@@ -72,13 +81,19 @@ class AmbientMixer {
     if (audio.paused) {
       this.soundManager.setVolume(soundId, 50);
       await this.soundManager.playSound(soundId);
-      // @todo - update play button to show pause icon
       this.ui.updateSoundPlayButton(soundId, true);
     } else {
       await this.soundManager.pauseSound(soundId);
-      // @todo - update play button to show play icon
       this.ui.updateSoundPlayButton(soundId, false);
     }
+  }
+
+  // Set the volume of a sound
+  setSoundVolume(soundId, volume) {
+    // Update sound volume in the sound manager
+    this.soundManager.setVolume(soundId, volume);
+    // Update sound volume in the UI
+    this.ui.updateSoundVolume(soundId, volume);
   }
 }
 

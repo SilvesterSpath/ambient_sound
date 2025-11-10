@@ -52,13 +52,13 @@ export class UI {
       <div class="flex-1 flex flex-col justify-center">
         <div class="flex items-center space-x-3">
           <i class="fas fa-volume-low opacity-50"></i>
-          <input type="range" class="volume-slider flex-1" min="0" max="100" value="0" data-sound="${sound.id}">
-          <span class="volume-value text-sm w-8 text-right">0</span>
+          <input type="range" class="volume-slider flex-1" min="0" max="100" value="50" data-sound="${sound.id}">
+          <span class="volume-value text-sm w-8 text-right">50</span>
         </div>
 
         <!-- Volume Bar Visualization -->
         <div class="volume-bar mt-3">
-          <div class="volume-bar-fill" style="width: 0%"></div>
+          <div class="volume-bar-fill" style="width: 50%"></div>
         </div>
       </div>
     </div>`;
@@ -93,6 +93,15 @@ export class UI {
         icon.classList.add('fa-play');
         card.classList.remove('playing');
       }
+    }
+  }
+
+  // Update the volume display of a sound
+  updateSoundVolume(soundId, volume) {
+    const card = document.querySelector(`[data-sound="${soundId}"]`);
+    if (card) {
+      const volumeValue = card.querySelector('.volume-value');
+      volumeValue.textContent = volume;
     }
   }
 }
