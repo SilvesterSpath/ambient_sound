@@ -102,6 +102,8 @@ export class UI {
     if (card) {
       const volumeValue = card.querySelector('.volume-value');
       volumeValue.textContent = volume;
+      const volumeBarFill = card.querySelector('.volume-bar-fill');
+      volumeBarFill.style.width = `${volume}%`;
     }
   }
 }
