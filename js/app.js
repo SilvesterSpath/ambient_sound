@@ -79,7 +79,20 @@ class AmbientMixer {
     }
 
     if (audio.paused) {
-      this.soundManager.setVolume(soundId, 50);
+      // Get current slider value
+      const slider = document.querySelector(
+        `[data-sound="${soundId}"] .volume-slider`
+      );
+      let volume = parseInt(slider.value, 10);
+
+      // If slider is at 0, default to 50%
+      if (volume === 0) {
+        volume = 50;
+        this.ui.updateSoundVolume(soundId, volume);
+      }
+
+      // Set the volume of the sound
+      this.soundManager.setVolume(soundId, volume);
       await this.soundManager.playSound(soundId);
       this.ui.updateSoundPlayButton(soundId, true);
     } else {

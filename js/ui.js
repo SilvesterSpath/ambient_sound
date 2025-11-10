@@ -52,13 +52,13 @@ export class UI {
       <div class="flex-1 flex flex-col justify-center">
         <div class="flex items-center space-x-3">
           <i class="fas fa-volume-low opacity-50"></i>
-          <input type="range" class="volume-slider flex-1" min="0" max="100" value="50" data-sound="${sound.id}">
-          <span class="volume-value text-sm w-8 text-right">50</span>
+          <input type="range" class="volume-slider flex-1" min="0" max="100" value="0" data-sound="${sound.id}">
+          <span class="volume-value text-sm w-8 text-right">0</span>
         </div>
 
         <!-- Volume Bar Visualization -->
         <div class="volume-bar mt-3">
-          <div class="volume-bar-fill" style="width: 50%"></div>
+          <div class="volume-bar-fill" style="width: 0%"></div>
         </div>
       </div>
     </div>`;
@@ -104,6 +104,8 @@ export class UI {
       volumeValue.textContent = volume;
       const volumeBarFill = card.querySelector('.volume-bar-fill');
       volumeBarFill.style.width = `${volume}%`;
+      const slider = card.querySelector('.volume-slider');
+      slider.value = volume;
     }
   }
 }
