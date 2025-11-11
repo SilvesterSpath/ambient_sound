@@ -10,6 +10,7 @@ class AmbientMixer {
     this.presetManager = null;
     this.timer = null;
     this.currentSoundState = {};
+    this.masterVolume = 100;
     this.isInitialized = false;
   }
 
@@ -52,6 +53,15 @@ class AmbientMixer {
         this.setSoundVolume(soundId, volume);
       }
     });
+
+    // Handle the master volume slider
+    const masterVolumeSlider = document.getElementById('masterVolume');
+    if (masterVolumeSlider) {
+      masterVolumeSlider.addEventListener('input', (event) => {
+        const volume = parseInt(event.target.value);
+        this.setMasterVolume(volume);
+      });
+    }
   }
 
   // Load all sound files
@@ -103,10 +113,46 @@ class AmbientMixer {
 
   // Set the volume of a sound
   setSoundVolume(soundId, volume) {
-    // Update sound volume in the sound manager
-    this.soundManager.setVolume(soundId, volume);
+    // Apply the master volume to the sound
+    const effectiveVolume = (volume * this.masterVolume) / 100;
+    // Update the sound volume in the sound manager
+    this.soundManager.setVolume(soundId, effectiveVolume);
     // Update sound volume in the UI
     this.ui.updateSoundVolume(soundId, volume);
+  }
+
+  // Set the master volume
+  setMasterVolume(volume) {
+    this.masterVolume = volume;
+    // Update master volume in the UI
+    const masterVolumeValue = document.getElementById('masterVolumeValue');
+    if (masterVolumeValue) {
+      masterVolumeValue.textContent = `${volume}%`;
+    }
+
+    // Apply the master volume to all playingsounds
+    this.applyMasterVolumeToAll(volume);
+  }
+
+  // Apply the master volume to all sounds
+  applyMasterVolumeToAll(volume) {
+    for (const [soundId, audio] of this.soundManager.audioElements) {
+      if (!audio.paused) {
+        const card = document.querySelector(`[data-sound="${soundId}"]`);
+        if (card) {
+          const volumeSlider = card?.querySelector?.('.volume-slider');
+          if (volumeSlider) {
+            const individualVolume = parseInt(volumeSlider.value);
+            const effectiveVolume =
+              (individualVolume * this.masterVolume) / 100;
+
+            // Apply to the actal audio element
+            audio.volume = effectiveVolume / 100;
+          }
+        }
+        this.soundManager.setVolume(soundId, volume);
+      }
+    }
   }
 }
 

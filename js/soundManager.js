@@ -62,7 +62,6 @@ export class SoundManager {
     // Convert volume to decimal (0-1)
     const volumeDecimal = volume / 100;
     audio.volume = volumeDecimal;
-    console.log(`Sound ${soundId} volume set to ${volume}%`);
     return true;
   }
 }
