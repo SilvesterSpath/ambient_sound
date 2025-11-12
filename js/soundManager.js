@@ -64,4 +64,24 @@ export class SoundManager {
     audio.volume = volumeDecimal;
     return true;
   }
+
+  // Play all sounds
+  playAllSounds() {
+    for (const [soundId, audio] of this.audioElements) {
+      if (audio.paused) {
+        audio.play();
+      }
+    }
+    this.isPlaying = true;
+  }
+
+  // Pause all sounds
+  pauseAllSounds() {
+    for (const [soundId, audio] of this.audioElements) {
+      if (!audio.paused) {
+        audio.pause();
+      }
+    }
+    this.isPlaying = false;
+  }
 }
