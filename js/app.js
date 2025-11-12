@@ -62,6 +62,13 @@ class AmbientMixer {
         this.setMasterVolume(volume);
       });
     }
+
+    // Handle master play/pause button
+    if (this.ui.playPauseAllButton) {
+      this.ui.playPauseAllButton.addEventListener('click', async () => {
+        this.toggleAllSounds();
+      });
+    }
   }
 
   // Load all sound files
@@ -101,13 +108,48 @@ class AmbientMixer {
         this.ui.updateSoundVolume(soundId, volume);
       }
 
-      // Set the volume of the sound
+      // Sound is off, turn it on
       this.soundManager.setVolume(soundId, volume);
       await this.soundManager.playSound(soundId);
       this.ui.updateSoundPlayButton(soundId, true);
     } else {
       await this.soundManager.pauseSound(soundId);
       this.ui.updateSoundPlayButton(soundId, false);
+    }
+
+    // Update the main play/pause button state
+    this.updateMainPlayButtonState();
+  }
+
+  // Toggle all sounds
+  toggleAllSounds() {
+    if (this.soundManager.isPlaying) {
+      this.soundManager.pauseAllSounds();
+      this.ui.updateMainPlayButton(false);
+      sounds.forEach((sound) => {
+        this.ui.updateSoundPlayButton(sound.id, false);
+      });
+    } else {
+      for (const [soundId, audio] of this.soundManager.audioElements) {
+        const card = document.querySelector(`[data-sound="${soundId}"]`);
+        const slider = card?.querySelector?.('.volume-slider');
+
+        if (slider) {
+          let volume = parseInt(slider.value);
+          if (volume === 0) {
+            volume = 50;
+            slider.value = volume;
+            this.ui.updateSoundVolume(soundId, volume);
+          }
+          this.currentSoundState[soundId] = volume;
+
+          const effectiveVolume = (volume * this.masterVolume) / 100;
+          audio.volume = effectiveVolume / 100;
+          this.ui.updateSoundPlayButton(soundId, true);
+        }
+      }
+      this.soundManager.playAllSounds();
+      this.ui.updateMainPlayButton(true);
     }
   }
 
@@ -119,6 +161,9 @@ class AmbientMixer {
     this.soundManager.setVolume(soundId, effectiveVolume);
     // Update sound volume in the UI
     this.ui.updateSoundVolume(soundId, volume);
+
+    // Sync sounds
+    this.updateMainPlayButtonState();
   }
 
   // Set the master volume
@@ -166,7 +211,7 @@ class AmbientMixer {
     }
     // Update the main button and the internal state
     this.soundManager.isPlaying = anySoundPlaying;
-    this.ui.updatePlayPauseAllButton(anySoundPlaying);
+    this.ui.updateMainPlayButton(anySoundPlaying);
   }
 }
 
@@ -174,14 +219,6 @@ class AmbientMixer {
 document.addEventListener('DOMContentLoaded', () => {
   const app = new AmbientMixer();
   app.init();
-
-  const playPauseBtn = document.getElementById('playPauseAll');
-
-  playPauseBtn.addEventListener('click', async () => {
-    // Example: play one sound to “unlock” audio via a real user gesture
-    await app.soundManager.playSound('rain');
-    // Later: start/stop multiple sounds as needed
-  });
 
   // make app available for testing in browser
   window.app = app;

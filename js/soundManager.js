@@ -8,7 +8,6 @@ export class SoundManager {
   loadSound(soundId, filePath) {
     try {
       const audio = new Audio(filePath);
-      audio.src = filePath;
       audio.id = soundId;
       audio.loop = true;
       audio.preload = 'metadata';
@@ -38,11 +37,11 @@ export class SoundManager {
   }
 
   // Pause a sound
-  async pauseSound(soundId) {
+  pauseSound(soundId) {
     const audio = this.audioElements.get(soundId);
     if (audio && !audio.paused) {
       try {
-        await audio.pause();
+        audio.pause();
         return true;
       } catch (error) {
         console.error(`Failed to pause sound ${soundId}:`, error);

@@ -110,14 +110,17 @@ export class UI {
   }
 
   // Update play/pause all button icon
-  updatePlayPauseAllButton(isPlaying) {
+  updateMainPlayButton(isPlaying) {
     const icon = this.playPauseAllButton.querySelector('i');
+    const label = this.playPauseAllButton.querySelector('span');
     if (isPlaying) {
       icon.classList.remove('fa-play');
       icon.classList.add('fa-pause');
+      if (label) label.textContent = 'Pause All';
     } else {
       icon.classList.remove('fa-pause');
       icon.classList.add('fa-play');
+      if (label) label.textContent = 'Play All';
     }
   }
 }
