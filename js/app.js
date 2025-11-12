@@ -153,6 +153,21 @@ class AmbientMixer {
       }
     }
   }
+
+  // Update main play/pause all button icon
+  updateMainPlayButtonState() {
+    // Check if any sound is playing
+    let anySoundPlaying = false;
+    for (const [soundId, audio] of this.soundManager.audioElements) {
+      if (!audio.paused) {
+        anySoundPlaying = true;
+        break;
+      }
+    }
+    // Update the main button and the internal state
+    this.soundManager.isPlaying = anySoundPlaying;
+    this.ui.updatePlayPauseAllButton(anySoundPlaying);
+  }
 }
 
 // Initialize the app when DOM is ready
