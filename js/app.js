@@ -69,6 +69,13 @@ class AmbientMixer {
         this.toggleAllSounds();
       });
     }
+
+    // Handle reset button
+    if (this.ui.resetButton) {
+      this.ui.resetButton.addEventListener('click', () => {
+        this.resetApp();
+      });
+    }
   }
 
   // Load all sound files
@@ -212,6 +219,16 @@ class AmbientMixer {
     // Update the main button and the internal state
     this.soundManager.isPlaying = anySoundPlaying;
     this.ui.updateMainPlayButton(anySoundPlaying);
+  }
+
+  // Reset the app to its initial state
+  resetApp() {
+    this.soundManager.stopAllSounds();
+    this.ui.resetUI();
+
+    this.masterVolume = 50;
+
+    console.log('App reset to initial state');
   }
 }
 
